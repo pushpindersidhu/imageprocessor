@@ -81,7 +81,7 @@ function_buttons = [
     ("Red", lambda: update_image(image_processor.red())),
     ("Green", lambda: update_image(image_processor.green())),
     ("Blue", lambda: update_image(image_processor.blue())),
-    ("Blur", lambda: update_image(image_processor.blur())),
+    ("Gaussian Blur", lambda: update_image(image_processor.gaussian((10, 10)))),
     ("Edge", lambda: update_image(image_processor.edge())),
     ("Sharpen", lambda: update_image(image_processor.sharpen())),
     (

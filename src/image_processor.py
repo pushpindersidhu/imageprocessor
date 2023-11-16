@@ -80,8 +80,13 @@ class ImageProcessor:
         return blue
 
     @to_pil
-    def blur(self):
-        return cv2.blur(self.image, (5, 5))
+    def gaussian(self, kernel_size=(5, 5)):
+        if kernel_size[0] % 2 == 0:
+            kernel_size = (kernel_size[0] + 1, kernel_size[1])
+        if kernel_size[1] % 2 == 0:
+            kernel_size = (kernel_size[0], kernel_size[1] + 1)
+
+        return cv2.GaussianBlur(self.image, kernel_size, 0)
 
     @to_pil
     def edge(self):
