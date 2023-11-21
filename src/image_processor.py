@@ -1,3 +1,4 @@
+import os
 from tkinter import filedialog
 import cv2
 import numpy as np
@@ -7,9 +8,10 @@ from utils.to_pil import to_pil
 class ImageProcessor:
     image = None
     f_types = [("Jpg Files", "*.jpg"), ("PNG Files", "*.png")]
+    demo_path = os.path.join(os.path.dirname(__file__), "../images/demo.jpg")
 
     def __init__(self) -> None:
-        self.image = cv2.imread("../images/demo.jpg")
+        self.image = cv2.imread(self.demo_path)
         self.image = cv2.resize(self.image, (500, 500))
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
 
