@@ -60,6 +60,7 @@ def update_image(modifiedPILImage=None):
 
         modified_image = ImageTk.PhotoImage(new_image)
     else:
+        modifiedPILImage = modifiedPILImage.resize((650, 525))
         modified_image = ImageTk.PhotoImage(modifiedPILImage)
 
     modified_label.config(image=modified_image)
@@ -67,10 +68,10 @@ def update_image(modifiedPILImage=None):
 
 
 left_frame = Frame(root, width=300, height=600, bg="#020617")
-left_frame.grid(row=0, column=0, padx=15, pady=5, sticky=NW, columnspan=2)
+left_frame.grid(row=0, column=0, padx=5, pady=5, sticky=NW, columnspan=2)
 
 right_frame = Frame(root, width=700, height=600, bg="#020617")
-right_frame.grid(row=0, column=2, padx=15, pady=5)
+right_frame.grid(row=0, column=2, padx=5, pady=5, columnspan=2, sticky=NW)
 
 Label(left_frame, text="Original", bg="#020617", fg="#ffffff", justify=LEFT).grid(
     row=0, column=0, padx=0, pady=5, columnspan=2, sticky=W
@@ -99,10 +100,36 @@ original_image = ImageTk.PhotoImage(image_processor.resize(width=300))
 original_label = Label(left_frame, image=original_image, bg="#020617", fg="#ffffff")
 original_label.grid(row=1, column=0, padx=1, pady=5, columnspan=4, sticky=W)
 
-modified_label = Label(
-    right_frame, image=image, width=700, height=600, bg="#020617", fg="#ffffff"
+Label(right_frame, text="Modified", bg="#020617", fg="#ffffff", justify=LEFT).grid(
+    row=0, column=0, padx=0, pady=5, columnspan=1, sticky=W
 )
-modified_label.grid(row=0, column=0, padx=0, pady=1)
+
+Button(
+    right_frame,
+    text="Save Image",
+    command=lambda: image_processor.save(),
+    height=32,
+    width=100,
+    fg="#fbbf24",
+    bg="#0f172a",
+    activebackground=("#0f172a", "#0f172a"),
+    borderless=1,
+    bd=0,
+    highlightthickness=0,
+    relief="flat",
+    focuscolor="#0f172a",
+    highlightbackground="#0f172a",
+    highlightcolor="#0f172a",
+    activeforeground="#fbbf24",
+).grid(row=0, column=1, padx=0, pady=5, columnspan=1, sticky=E)
+
+
+modified_label = Label(
+    right_frame, bg="#020617", fg="#ffffff", width=650, height=525
+)
+modified_label.grid(row=1, column=0, padx=0, pady=5, columnspan=2, sticky=W)
+
+update_image(modifiedPILImage=image_processor.get_image())
 
 tool_bar = ttk.Notebook(
     left_frame,
