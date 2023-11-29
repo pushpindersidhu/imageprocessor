@@ -3,7 +3,7 @@ from tkinter import filedialog
 import cv2
 import numpy as np
 from utils.to_pil import to_pil
-
+from utils.pil_to_cv2 import pil_to_cv2
 
 class ImageProcessor:
     image = None
@@ -14,6 +14,7 @@ class ImageProcessor:
         self.path = self.demo_path
         self.image = cv2.imread(self.demo_path)
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
+        self.modified_image = to_pil(self.image)
 
     @to_pil
     def get_image(self):
@@ -34,7 +35,8 @@ class ImageProcessor:
         )
 
         if path:
-            cv2.imwrite(path, self.image)
+            img = pil_to_cv2(self.modified_image)
+            cv2.imwrite(path, img)
 
     @to_pil
     def resize(self, width=None, height=None):

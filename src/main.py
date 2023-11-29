@@ -53,6 +53,7 @@ def update_image(modifiedPILImage=None):
 
     if modifiedPILImage is None:
         new_image = image_processor.get_image()
+        image_processor.modified_image = new_image
 
         origional_image = ImageTk.PhotoImage(new_image.resize((300, 300)))
         original_label.config(image=origional_image)
@@ -60,6 +61,7 @@ def update_image(modifiedPILImage=None):
 
         modified_image = ImageTk.PhotoImage(new_image.resize((650, 525)))
     else:
+        image_processor.modified_image = modifiedPILImage
         modifiedPILImage = modifiedPILImage.resize((650, 525))
         modified_image = ImageTk.PhotoImage(modifiedPILImage)
 
