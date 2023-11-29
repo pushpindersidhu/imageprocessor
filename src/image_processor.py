@@ -104,3 +104,65 @@ class ImageProcessor:
         gamma = float(gamma)
         gamma_corrected = np.array(255 * (self.image / 255) ** gamma, dtype="uint8")
         return gamma_corrected
+
+    @to_pil
+    def sepia(self):
+        sepia_matrix = np.array(
+            [[0.393, 0.769, 0.189], [0.349, 0.686, 0.168], [0.272, 0.534, 0.131]]
+        )
+        sepia_image = cv2.transform(self.image, sepia_matrix)
+        sepia_image = np.clip(sepia_image, 0, 255).astype(np.uint8)
+        return sepia_image
+
+    @to_pil
+    def flip_horizontal(self):
+        return cv2.flip(self.image, 1)
+
+    @to_pil
+    def flip_vertical(self):
+        return cv2.flip(self.image, 0)
+
+    @to_pil
+    def rotate(self, angle):
+        rows, cols, _ = self.image.shape
+        rotation_matrix = cv2.getRotationMatrix2D((cols / 2, rows / 2), angle, 1)
+        rotated_image = cv2.warpAffine(self.image, rotation_matrix, (cols, rows))
+        return rotated_image
+
+    @to_pil
+    def blur(self, kernel_size=(5, 5)):
+        return cv2.blur(self.image, kernel_size)
+
+    @to_pil
+    def invert_colors(self):
+        return cv2.bitwise_not(self.image)
+
+    @to_pil
+    def emboss(self):
+        emboss_kernel = np.array([[-2, -1, 0], [-1, 1, 1], [0, 1, 2]])
+        embossed_image = cv2.filter2D(self.image, -1, emboss_kernel)
+        return embossed_image
+
+    @to_pil
+    def median_filter(self, kernel_size=5):
+        return cv2.medianBlur(self.image, kernel_size)
+
+    @to_pil
+    def threshold(
+        self, threshold_value=128, max_value=255, threshold_type=cv2.THRESH_BINARY
+    ):
+        _, thresholded_image = cv2.threshold(
+            self.image, threshold_value, max_value, threshold_type
+        )
+        return thresholded_image
+
+    @to_pil
+    def cartoonize(self):
+        gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        cartoon = cv2.bilateralFilter(self.image, d=9, sigmaColor=300, sigmaSpace=300)
+        edges = cv2.adaptiveThreshold(
+            gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 21
+        )
+        cartoon = cv2.bitwise_and(cartoon, cartoon, mask=edges)
+
+        return cartoon
