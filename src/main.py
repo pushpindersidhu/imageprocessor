@@ -2,6 +2,7 @@ from tkinter import *
 from tkmacosx import Button
 from PIL import ImageTk
 from image_processor import ImageProcessor
+from tkinter import ttk
 
 root = Tk()
 image_processor = ImageProcessor()
@@ -9,6 +10,42 @@ root.title("Image Processor")
 root.geometry("1000x600")
 root.resizable(False, False)
 root.config(bg="#020617")
+
+style = ttk.Style()
+
+style.theme_create(
+    "theme",
+    parent="alt",
+    settings={
+        "TNotebook": {
+            "configure": {
+                "tabmargins": [2, 5, 2, 0],
+                "background": "#020617",
+                "foreground": "#d1d5db",
+                "borderwidth": 0,
+                "bordercolor": "#0f172a",
+                "tabposition": "n",
+            }
+        },
+        "TNotebook.Tab": {
+            "configure": {
+                "padding": [5, 5],
+                "margin": [0, 0],
+                "background": "#020617",
+                "foreground": "#d1d5db",
+                "borderwidth": 0,
+                "relief": "flat",
+            },
+            "map": {
+                "background": [("selected", "#0f172a")],
+                "foreground": [("selected", "#fbbf24")],
+                "expand": [("selected", [1, 1, 1, 0])],
+            },
+        },
+    },
+)
+
+style.theme_use("theme")
 
 
 def update_image(modifiedPILImage=None):
@@ -67,48 +104,80 @@ modified_label = Label(
 )
 modified_label.grid(row=0, column=0, padx=0, pady=1)
 
-tool_bar = Frame(
+tool_bar = ttk.Notebook(
     left_frame,
     width=300,
-    bg="#020617",
 )
 tool_bar.grid(row=2, column=0, padx=1, pady=5, columnspan=4, sticky=W)
 
-function_buttons = [
-    ("Grayscale", lambda: update_image(image_processor.grayscale())),
-    ("Negative", lambda: update_image(image_processor.negative())),
-    ("Pencil", lambda: update_image(image_processor.pencil())),
-    ("Red", lambda: update_image(image_processor.red())),
-    ("Green", lambda: update_image(image_processor.green())),
-    ("Blue", lambda: update_image(image_processor.blue())),
-    ("Gaussian Blur", lambda: update_image(image_processor.gaussian((10, 10)))),
-    ("Edge", lambda: update_image(image_processor.edge())),
-    ("Sharpen", lambda: update_image(image_processor.sharpen())),
-    (
-        "Power Law Transform",
-        lambda: update_image(image_processor.powlawtrans(gamma=1.5)),
-    ),
-]
+function_buttons = {
+    "Basic": [
+        ("Grayscale", lambda: update_image(image_processor.grayscale())),
+        ("Negative", lambda: update_image(image_processor.negative())),
+        ("Pencil", lambda: update_image(image_processor.pencil())),
+    ],
+    "Color Channels": [
+        ("Red", lambda: update_image(image_processor.red())),
+        ("Green", lambda: update_image(image_processor.green())),
+        ("Blue", lambda: update_image(image_processor.blue())),
+    ],
+    "Filters": [
+        (
+            "Gaussian Blur",
+            lambda: update_image(image_processor.gaussian((10, 10))),
+        ),
+        ("Edge", lambda: update_image(image_processor.edge())),
+        ("Sharpen", lambda: update_image(image_processor.sharpen())),
+    ],
+    "Advanced": [
+        (
+            "Power Law Transform",
+            lambda: update_image(image_processor.powlawtrans(gamma=1.5)),
+        ),
+        ("Sepia", lambda: update_image(image_processor.sepia())),
+        (
+            "Flip Horizontal",
+            lambda: update_image(image_processor.flip_horizontal()),
+        ),
+        (
+            "Flip Vertical",
+            lambda: update_image(image_processor.flip_vertical()),
+        ),
+    ],
+}
 
-for i, (text, command) in enumerate(function_buttons):
-    Button(
+for category, buttons in function_buttons.items():
+    tab = Frame(
         tool_bar,
-        text=text,
-        command=command,
-        width=146,
-        height=35,
-        fg="#fbbf24",
-        bg="#0f172a",
-        activebackground=("#0f172a", "#0f172a"),
-        borderless=1,
-        bd=0,
-        justify=CENTER,
-        highlightthickness=0,
-        relief="flat",
-        focuscolor="#0f172a",
-        highlightbackground="#0f172a",
+        width=200,
+        height=600,
+        bg="#020617",
+        border=0,
         highlightcolor="#0f172a",
-        activeforeground="#fbbf24",
-    ).grid(row=i // 2, column=i % 2, padx=2, pady=5)
+        highlightthickness=1,
+        bd=0,
+        relief="flat",
+    )
+    tool_bar.add(tab, text=category)
+    for i, (text, command) in enumerate(buttons):
+        Button(
+            tab,
+            text=text,
+            command=command,
+            width=146,
+            height=35,
+            fg="#fbbf24",
+            bg="#0f172a",
+            activebackground=("#0f172a", "#0f172a"),
+            borderless=1,
+            bd=0,
+            justify=CENTER,
+            highlightthickness=0,
+            relief="flat",
+            focuscolor="#0f172a",
+            highlightbackground="#0f172a",
+            highlightcolor="#0f172a",
+            activeforeground="#fbbf24",
+        ).grid(row=i // 2, column=i % 2, padx=1, pady=5)
 
 root.mainloop()
