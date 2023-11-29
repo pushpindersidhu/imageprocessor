@@ -100,7 +100,7 @@ class ImageProcessor:
         return cv2.filter2D(self.image, -1, kernel)
 
     @to_pil
-    def powlawtrans(self, gamma):
+    def powlawtrans(self, gamma=1.4):
         gamma = float(gamma)
         gamma_corrected = np.array(255 * (self.image / 255) ** gamma, dtype="uint8")
         return gamma_corrected
