@@ -36,6 +36,7 @@ class ImageProcessor:
 
         if path:
             img = pil_to_cv2(self.modified_image)
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
             cv2.imwrite(path, img)
 
     @to_pil
