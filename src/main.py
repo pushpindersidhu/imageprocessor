@@ -180,4 +180,14 @@ for category, buttons in function_buttons.items():
             activeforeground="#fbbf24",
         ).grid(row=i // 2, column=i % 2, padx=1, pady=5)
 
+menubar = Menu(root)
+
+for category, buttons in function_buttons.items():
+    category_menu = Menu(menubar, tearoff=0)
+    for button_text, command in buttons:
+        category_menu.add_command(label=button_text, command=command)
+    menubar.add_cascade(label=category, menu=category_menu)
+
+root.config(menu=menubar)
+
 root.mainloop()
