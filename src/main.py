@@ -111,38 +111,35 @@ tool_bar = ttk.Notebook(
 tool_bar.grid(row=2, column=0, padx=1, pady=5, columnspan=4, sticky=W)
 
 function_buttons = {
-    "Basic": [
+    "Effects": [
         ("Grayscale", lambda: update_image(image_processor.grayscale())),
         ("Negative", lambda: update_image(image_processor.negative())),
-        ("Pencil", lambda: update_image(image_processor.pencil())),
-    ],
-    "Color Channels": [
-        ("Red", lambda: update_image(image_processor.red())),
-        ("Green", lambda: update_image(image_processor.green())),
-        ("Blue", lambda: update_image(image_processor.blue())),
-    ],
-    "Filters": [
+        ("Pencil Sketch", lambda: update_image(image_processor.pencil())),
         (
             "Gaussian Blur",
-            lambda: update_image(image_processor.gaussian((10, 10))),
+            lambda: update_image(image_processor.gaussian(kernel_size=(10, 10))),
         ),
-        ("Edge", lambda: update_image(image_processor.edge())),
+        ("Edge Detection", lambda: update_image(image_processor.edge())),
         ("Sharpen", lambda: update_image(image_processor.sharpen())),
+        ("Emboss", lambda: update_image(image_processor.emboss())),
+        ("Median Filter", lambda: update_image(image_processor.median_filter())),
     ],
-    "Advanced": [
-        (
-            "Power Law Transform",
-            lambda: update_image(image_processor.powlawtrans(gamma=1.5)),
-        ),
+    "Adjustments": [
+        ("Threshold", lambda: update_image(image_processor.threshold())),
         ("Sepia", lambda: update_image(image_processor.sepia())),
-        (
-            "Flip Horizontal",
-            lambda: update_image(image_processor.flip_horizontal()),
-        ),
-        (
-            "Flip Vertical",
-            lambda: update_image(image_processor.flip_vertical()),
-        ),
+        ("Cartoonize", lambda: update_image(image_processor.cartoonize())),
+        ("Power Law", lambda: update_image(image_processor.powlawtrans())),
+    ],
+    "Orientation": [
+        ("Rotate 90 degrees", lambda: update_image(image_processor.rotate(90))),
+        ("Flip Horizontal", lambda: update_image(image_processor.flip_horizontal())),
+        ("Flip Vertical", lambda: update_image(image_processor.flip_vertical())),
+    ],
+    "Channels": [
+        ("Invert Colors", lambda: update_image(image_processor.invert_colors())),
+        ("Red Channel", lambda: update_image(image_processor.red())),
+        ("Green Channel", lambda: update_image(image_processor.green())),
+        ("Blue Channel", lambda: update_image(image_processor.blue())),
     ],
 }
 
@@ -164,7 +161,7 @@ for category, buttons in function_buttons.items():
             tab,
             text=text,
             command=command,
-            width=146,
+            width=140,
             height=35,
             fg="#fbbf24",
             bg="#0f172a",
@@ -178,7 +175,7 @@ for category, buttons in function_buttons.items():
             highlightbackground="#0f172a",
             highlightcolor="#0f172a",
             activeforeground="#fbbf24",
-        ).grid(row=i // 2, column=i % 2, padx=1, pady=5)
+        ).grid(row=i // 2, column=i % 2, padx=4, pady=5)
 
 menubar = Menu(root)
 
