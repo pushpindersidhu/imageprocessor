@@ -132,8 +132,13 @@ function_buttons = {
     ],
     "Orientation": [
         ("Rotate 90 degrees", lambda: update_image(image_processor.rotate(90))),
+        ("Rotate 180 degrees", lambda: update_image(image_processor.rotate(180))),
+        ("Rotate 270 degrees", lambda: update_image(image_processor.rotate(270))),
         ("Flip Horizontal", lambda: update_image(image_processor.flip_horizontal())),
         ("Flip Vertical", lambda: update_image(image_processor.flip_vertical())),
+        ("Fish Eye", lambda: update_image(image_processor.fish_eye())),
+        ("Shear X", lambda: update_image(image_processor.shear_x())),
+        ("Shear Y", lambda: update_image(image_processor.shear_y())),
     ],
     "Channels": [
         ("Invert Colors", lambda: update_image(image_processor.invert_colors())),

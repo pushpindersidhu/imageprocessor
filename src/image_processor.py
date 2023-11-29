@@ -166,3 +166,40 @@ class ImageProcessor:
         cartoon = cv2.bitwise_and(cartoon, cartoon, mask=edges)
 
         return cartoon
+
+    @to_pil
+    def shear_x(self, factor=0.5):
+        rows, cols, ch = self.image.shape
+        M = np.float32([[1, factor, 0], [0, 1, 0], [0, 0, 1]])
+        return cv2.warpPerspective(self.image, M, (cols, rows))
+    
+    @to_pil
+    def shear_y(self, factor=0.5):
+        rows, cols, ch = self.image.shape
+        M = np.float32([[1, 0, 0], [factor, 1, 0], [0, 0, 1]])
+        return cv2.warpPerspective(self.image, M, (cols, rows))
+    
+
+    @to_pil
+    def fish_eye(self):
+        rows, cols, ch = self.image.shape
+        distCoeff = np.zeros((4, 1), np.float64)
+        k1 = -6e-5
+        k2 = 0.0
+        p1 = 0.0
+        p2 = 0.0
+        distCoeff[0, 0] = k1
+        distCoeff[1, 0] = k2
+        distCoeff[2, 0] = p1
+        distCoeff[3, 0] = p2
+
+        cam = np.eye(3, dtype=np.float32)
+
+        cam[0, 2] = cols / 2.0
+
+        cam[1, 2] = rows / 2.0
+
+        cam[0, 0] = 10.0
+        cam[1, 1] = 10.0
+
+        return cv2.fisheye.undistortImage(self.image, cam, distCoeff, None, cam)
