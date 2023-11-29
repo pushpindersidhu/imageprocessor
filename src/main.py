@@ -58,7 +58,7 @@ def update_image(modifiedPILImage=None):
         original_label.config(image=origional_image)
         original_label.image = origional_image
 
-        modified_image = ImageTk.PhotoImage(new_image)
+        modified_image = ImageTk.PhotoImage(new_image.resize((650, 525)))
     else:
         modifiedPILImage = modifiedPILImage.resize((650, 525))
         modified_image = ImageTk.PhotoImage(modifiedPILImage)
@@ -129,7 +129,7 @@ modified_label = Label(
 )
 modified_label.grid(row=1, column=0, padx=0, pady=5, columnspan=2, sticky=W)
 
-update_image(modifiedPILImage=image_processor.get_image())
+update_image()
 
 tool_bar = ttk.Notebook(
     left_frame,

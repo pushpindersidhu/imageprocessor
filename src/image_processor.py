@@ -11,8 +11,8 @@ class ImageProcessor:
     demo_path = os.path.join(os.path.dirname(__file__), "../images/demo.jpg")
 
     def __init__(self) -> None:
+        self.path = self.demo_path
         self.image = cv2.imread(self.demo_path)
-        self.image = cv2.resize(self.image, (500, 500))
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
 
     @to_pil
@@ -21,13 +21,20 @@ class ImageProcessor:
 
     def open(self):
         path = filedialog.askopenfilename(filetypes=self.f_types)
+        self.path = path
         self.image = cv2.imread(path)
-        self.image = cv2.resize(self.image, (500, 500))
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
 
     def save(self):
-        with open("image.png", "wb") as file:
-            file.write(self.image)
+        path = filedialog.asksaveasfilename(
+            filetypes=self.f_types,
+            title="Save Image",
+            initialfile="modified-" + os.path.basename(self.path),
+            defaultextension=os.path.splitext(self.path)[1],
+        )
+
+        if path:
+            cv2.imwrite(path, self.image)
 
     @to_pil
     def resize(self, width=None, height=None):
@@ -172,13 +179,12 @@ class ImageProcessor:
         rows, cols, ch = self.image.shape
         M = np.float32([[1, factor, 0], [0, 1, 0], [0, 0, 1]])
         return cv2.warpPerspective(self.image, M, (cols, rows))
-    
+
     @to_pil
     def shear_y(self, factor=0.5):
         rows, cols, ch = self.image.shape
         M = np.float32([[1, 0, 0], [factor, 1, 0], [0, 0, 1]])
         return cv2.warpPerspective(self.image, M, (cols, rows))
-    
 
     @to_pil
     def fish_eye(self):
